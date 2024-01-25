@@ -1,7 +1,10 @@
 <?php echo "Hello World!"; ?><br/>
 
 <?php echo "You need to properly configure your DNS."; ?><br/>
+
+
 <?php
+$logFile = '/home/LogFiles/logfile.log'; // Specify the path to your log file here
 $logData = [
     'Date & Time' => date('Y-m-d H:i:s'),
     'IP Address' => $_SERVER['REMOTE_ADDR'] ?? 'Not Available',
@@ -13,7 +16,7 @@ $logData = [
     // Add more elements as needed
 ];
 
-error_log(json_encode($logData));
+error_log(json_encode($logData) . PHP_EOL, 3, $logFile);
 ?>
 
 <?php echo "c557f380f2a0d08e0da03343c978cfe439ecaf31afd57c539f832e862b418a02"; ?>
