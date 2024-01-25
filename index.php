@@ -3,11 +3,19 @@
 <?php echo "You need to properly configure your DNS."; ?><br/>
 
 <?php
-$logFile = '/home/LogFiles/logfile.log'; // Specify the path to your log file here
+// Specify the path to your log file here
+$logFile = '/home/LogFiles/logfile.log';
 
-// Use Cloudflare's header to get the client's real IP address
-$ipAddress = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? ($_SERVER['REMOTE_ADDR'] ?? 'Not Available');
+// Get the visitor's IP address
+if (isset($_SERVER['HTTP_X_CLIENT_IP'])) {
+    $ipAddress = $_SERVER['HTTP_X_CLIENT_IP'];
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+} else {
+    $ipAddress = $_SERVER['REMOTE_ADDR'];
+}
 
+// Log data
 $logData = [
     'Date & Time' => date('Y-m-d H:i:s'),
     'IP Address' => $ipAddress,
@@ -19,6 +27,7 @@ $logData = [
     // Add more elements as needed
 ];
 
+// Write log data to the specified log file
 error_log(json_encode($logData) . PHP_EOL, 3, $logFile);
 ?>
 
